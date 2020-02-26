@@ -1,6 +1,6 @@
 # Pobieranie danych z rejestru TERYT
 
-GUS udostępnia usługę sieciową [TERYT ws1](http://eteryt.stat.gov.pl/eTeryt/rejestr_teryt/udostepnianie_danych/baza_teryt/usluga_sieciowa_interfejsy_api/opis_uslugi_sieciowej.aspx?contrast=default).<br>
+GUS udostępnia usługę sieciową [TERYT ws1](https://api.stat.gov.pl/Home/TerytApi).<br>
 Dane przesyłane są w formacie XML protokołem [SOAP](https://pl.wikipedia.org/wiki/SOAP).<br>
 Potrzebujemy więc klienta, który obsłuży ten protokół, np. [zeep](https://python-zeep.readthedocs.io/en/master/):
 ```bash
@@ -40,9 +40,16 @@ print(client.service.CzyZalogowany())
 
 Jeżeli wszystko jest ok, powinno wypisać ```True```.
 
+> **Update:** W przypadku wystąpienia błędu:
+
+> `zeep.exceptions.XMLParseError: The namespace defined on the xsd:import doesn't match the imported targetNamespace located at 'https://uslugaterytws1test.stat.gov.pl/wsdl/xsd1.xsd'  (https://uslugaterytws1test.stat.gov.pl/wsdl/terytws1.wsdl:53)
+`
+
+> należy pobrać wskazany w komunikacie plik [terytws1.wsdl](https://uslugaterytws1test.stat.gov.pl/wsdl/terytws1.wsdl) i w linii nr 53 zmienić odwołanie z `xsd1.xsd` na `xsd2.xsd`, a&nbsp;następnie w słowniku `CREDENTIALS` dla klucza `wsdl` podać ścieżkę do zmodyfikowanego pliku terytws1.wsdl.
+
 Kiedy mamy już do dyspozycji obiekt klienta, <br>
 możemy na nim wywoływać metody dostępne w TERYT ws1<br>
-(pełna lista metod w [instrukcji](http://eteryt.stat.gov.pl/eteryt/files/instrukcja_techniczna_uslugi_teryt_ws1.zip)).
+(pełna lista metod w [instrukcji](https://api.stat.gov.pl/Content/files/teryt/instrukcja_techniczna_uslugi_teryt_ws1.zip)).
 
 Wiele z tych metod wymaga podania daty jako argumentu. Zatem:
 ```python
